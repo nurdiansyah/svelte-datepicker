@@ -31,6 +31,7 @@ function setup (given, config) {
     shouldShakeDate: writable(false),
     isOpen: writable(false),
     isClosing: writable(false),
+    isPredefined: writable(false),
     highlighted: writable(today),
     formatter,
     isDateChosen: writable(isDateChosen),

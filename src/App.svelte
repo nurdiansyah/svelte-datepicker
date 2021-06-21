@@ -189,7 +189,7 @@
                 <h2>Without Time Choice</h2>
                 <Route path="/">
                   <div class="demo">
-                    <DatePicker format='ddd, DD MMM YYYY' range={true} />
+                    <DatePicker predefined format='ddd, DD MMM YYYY' range={true} />
                   </div>
                 </Route>
                 <Route path="/with-responsive-positioning/*">

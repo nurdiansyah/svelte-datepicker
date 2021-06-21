@@ -1,33 +1,35 @@
 <script>
-  import Popover from './Popover.svelte'
-  import { dayjs } from './lib/date-utils'
-  import { contextKey, setup } from './lib/context'
-  import { createEventDispatcher, setContext, getContext } from 'svelte'
-  import { CalendarStyle } from '../calendar-style.js'
-  import { createViewContext } from './lib/view-context.js'
-  import Toolbar from './Toolbar.svelte'
-  import View from './view/View.svelte'
+  import Popover from "./Popover.svelte";
+  import { dayjs } from "./lib/date-utils";
+  import { contextKey, setup } from "./lib/context";
+  import { createEventDispatcher, setContext, getContext } from "svelte";
+  import { CalendarStyle } from "../calendar-style.js";
+  import { createViewContext } from "./lib/view-context.js";
+  import Toolbar from "./Toolbar.svelte";
+  import View from "./view/View.svelte";
+  import PredefinedView from "./view/predefined-view/PredefinedView.svelte";
 
-  export let range = false
-  export let placeholder = 'Choose Date'
-  export let format = 'DD / MM / YYYY'
-  export let start = dayjs().subtract(1, 'year')
-  export let end = dayjs().add(1, 'year')
-  export let trigger = null
-  export let selectableCallback = null
-  export let styling = new CalendarStyle()
-  export let selected
-  export let closeOnFocusLoss = true
-  export let time = false
-  export let morning = 7
-  export let night = 19
-  export let minuteStep = 5
-  export let continueText = 'Continue'
+  export let range = false;
+  export let predefined = false;
+  export let placeholder = "Choose Date";
+  export let format = "DD / MM / YYYY";
+  export let start = dayjs().subtract(1, "year");
+  export let end = dayjs().add(1, "year");
+  export let trigger = null;
+  export let selectableCallback = null;
+  export let styling = new CalendarStyle();
+  export let selected;
+  export let closeOnFocusLoss = true;
+  export let time = false;
+  export let morning = 7;
+  export let night = 19;
+  export let minuteStep = 5;
+  export let pickLabel = "Pick";
 
-  const dispatch = createEventDispatcher()
+  const dispatch = createEventDispatcher();
 
-  const startContextKey = {}
-  const endContextKey = {}
+  const startContextKey = {};
+  const endContextKey = {};
 
   const config = {
     start: dayjs(start),
@@ -39,84 +41,132 @@
     morning,
     night,
     selectableCallback,
-    minuteStep: parseInt(minuteStep)
-  }
+    minuteStep: parseInt(minuteStep),
+  };
 
-  setContext(contextKey, setup(selected, config))
+  setContext(contextKey, setup(selected, config));
   const {
     selectedStartDate,
     selectedEndDate,
     isOpen,
     isClosing,
+    isPredefined,
     highlighted,
     formatter,
     isDateChosen,
-    isSelectingFirstDate
-  } = getContext(contextKey)
+    isSelectingFirstDate,
+  } = getContext(contextKey);
 
-  setContext(startContextKey, createViewContext(true, getContext(contextKey)))
+  setContext(startContextKey, createViewContext(true, getContext(contextKey)));
 
   if (config.isRangePicker) {
-    setContext(endContextKey, createViewContext(false, getContext(contextKey)))
+    setContext(endContextKey, createViewContext(false, getContext(contextKey)));
   }
 
-  let popover
+  let popover;
 
-  function initialisePicker () {
-    highlighted.set($selectedStartDate)
-    dispatch('open')
+  function initialisePicker() {
+    highlighted.set($selectedStartDate);
+    dispatch("open");
   }
-  
-  function setRangeValue () {
-    selected = [ $selectedStartDate, $selectedEndDate ]
-    dispatch('range-selected', {
+
+  function setRangeValue() {
+    selected = [$selectedStartDate, $selectedEndDate];
+    dispatch("range-selected", {
       from: $selectedStartDate.toDate(),
-      to: $selectedEndDate.toDate()
-    })
+      to: $selectedEndDate.toDate(),
+    });
   }
 
-  function setDateValue () {
-    selected = $selectedStartDate.toDate()
-    dispatch('date-selected', {
-      date: $selectedStartDate.toDate()
-    })
+  function setDateValue() {
+    selected = $selectedStartDate.toDate();
+    dispatch("date-selected", {
+      date: $selectedStartDate.toDate(),
+    });
   }
 
-  function swapDatesIfRequired () {
-    if (!config.isRangePicker) { return }
-    const from = $selectedStartDate
-    const to = $selectedEndDate
+  function swapDatesIfRequired() {
+    if (!config.isRangePicker) {
+      return;
+    }
+    const from = $selectedStartDate;
+    const to = $selectedEndDate;
     if (to.isBefore(from)) {
-      selectedStartDate.set(to)
-      selectedEndDate.set(from)
+      selectedStartDate.set(to);
+      selectedEndDate.set(from);
     }
   }
 
-  function addDate (e) {
-    const { date } = e.detail
+  function addDate(e) {
+    const { date } = e.detail;
     if ($isSelectingFirstDate) {
-      selectedStartDate.set(date)
-      swapDatesIfRequired()
-      config.isRangePicker && isSelectingFirstDate.update(v => !v)
+      selectedStartDate.set(date);
+      swapDatesIfRequired();
+      config.isRangePicker && isSelectingFirstDate.update((v) => !v);
     } else {
-      selectedEndDate.set(date)
-      swapDatesIfRequired()
+      selectedEndDate.set(date);
+      swapDatesIfRequired();
       // popover.close()
     }
   }
 
-  function close () {
-    swapDatesIfRequired()
-    popover.close()
+  function close() {
+    swapDatesIfRequired();
+    popover.close();
   }
 
   $: {
     if ($isDateChosen) {
-      config.isRangePicker ? setRangeValue() : setDateValue()
-      dispatch('change')
+      config.isRangePicker ? setRangeValue() : setDateValue();
+      dispatch("change");
     }
   }
 </script>
+
+<div
+  class="datepicker"
+  class:open={$isOpen}
+  class:closing={$isClosing}
+  style={styling.toWrapperStyle()}
+>
+  <Popover
+    {trigger}
+    bind:this={popover}
+    on:opened={initialisePicker}
+    on:closed={() => dispatch("close")}
+  >
+    <div slot="trigger">
+      <slot formatted={$formatter}>
+        {#if !trigger}
+          <button class="calendar-button" type="button">
+            {#if $isDateChosen}
+              {$formatter.formattedCombined}
+            {:else}
+              {placeholder}
+            {/if}
+          </button>
+        {/if}
+      </slot>
+    </div>
+    <div
+      class="contents"
+      slot="contents"
+      class:is-range-picker={config.isRangePicker}
+    >
+      {#if predefined && !$isPredefined}
+        <PredefinedView />
+      {:else}
+        <div class="view">
+          <View viewContextKey={startContextKey} on:chosen={addDate} />
+          {#if config.isRangePicker}
+            <View viewContextKey={endContextKey} on:chosen={addDate} />
+          {/if}
+        </div>
+        <Toolbar {pickLabel} on:close={close} />
+      {/if}
+    </div>
+  </Popover>
+</div>
 
 <style>
   .datepicker {
@@ -170,44 +220,3 @@
     }
   }
 </style>
-
-<div
-  class="datepicker"
-  class:open={$isOpen}
-  class:closing={$isClosing}
-  style={styling.toWrapperStyle()}>
-  <Popover
-    {trigger}
-    bind:this={popover}
-    on:opened={initialisePicker}
-    on:closed={() => dispatch('close')}>
-    <div slot="trigger">
-      <slot formatted={$formatter}>
-        {#if !trigger}
-          <button class="calendar-button" type="button">
-            {#if $isDateChosen}
-              {$formatter.formattedCombined}
-            {:else}
-              {placeholder}
-            {/if}
-          </button>
-        {/if}
-      </slot>
-    </div>
-    <div class="contents" slot="contents" class:is-range-picker={config.isRangePicker}>
-      <div class="view">
-        <View
-          viewContextKey={startContextKey}
-          on:chosen={addDate}
-        />
-        {#if config.isRangePicker}
-        <View
-          viewContextKey={endContextKey}
-          on:chosen={addDate}
-        />
-        {/if}
-      </div>
-      <Toolbar continueText={continueText} on:close={close} />
-    </div>
-  </Popover>
-</div>

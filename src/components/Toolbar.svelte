@@ -1,6 +1,6 @@
 <div class="toolbar">
   <button type="button" class="button" on:click|preventDefault={progress}>
-    {continueText}
+    {pickLabel}
   </button>
 </div>
 
@@ -8,7 +8,7 @@
   import { getContext, createEventDispatcher } from 'svelte'
   import { contextKey } from './lib/context.js'
 
-  export let continueText
+  export let pickLabel = ""
   
   const dispatch = createEventDispatcher()
 
