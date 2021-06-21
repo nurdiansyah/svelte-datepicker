@@ -81,7 +81,7 @@
   }
   .day { 
     flex: 1 0 auto;
-    height: 32px;
+    height: 27px;
     display: flex; 
     flex-basis: 0;
     justify-content: center;
@@ -100,7 +100,7 @@
     display: flex;
     justify-content: center;
     width: 32px;
-    height: 32px;
+    height: 27px;
     position: relative;
     border: 1px solid var(--button-background-color);
     border-radius: 50%;
@@ -136,7 +136,7 @@
   .day.selection-end:before {
     content: "";
     position: absolute;
-    height: 32px;
+    height: 27px;
     width: 100%;
   }
   .day.is-range-picker.part-of-range:before, 

@@ -37,7 +37,7 @@ class CalendarStyle {
     this.monthYearTextColor = '#3d4548'
     this.legendTextColor = '#4a4a4a'
 
-    this.datepickerWidth = 'auto'
+    this.datepickerWidth = '240px'
 
     Object.entries(overrides).forEach(([ prop, value ]) => {
       this[prop] = value

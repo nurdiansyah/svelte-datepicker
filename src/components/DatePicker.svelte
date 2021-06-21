@@ -96,11 +96,13 @@
     const { date } = e.detail
     if ($isSelectingFirstDate) {
       selectedStartDate.set(date)
+      swapDatesIfRequired()
+      config.isRangePicker && isSelectingFirstDate.update(v => !v)
     } else {
       selectedEndDate.set(date)
+      swapDatesIfRequired()
+      // popover.close()
     }
-    swapDatesIfRequired()
-    config.isRangePicker && isSelectingFirstDate.update(v => !v)
   }
 
   function close () {
@@ -120,6 +122,9 @@
   .datepicker {
     display: inline-block;
     text-align: center;
+    font-family: Arial;
+    font-size: 12px;
+    line-height: 1em;
     overflow: visible;
     width: var(--datepicker-width);
   }

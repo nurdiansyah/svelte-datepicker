@@ -185,8 +185,8 @@
 
   .arrow {
     display: inline-block;
-    width: 15px;
-    height: 15px;
+    width: 8px;
+    height: 8px;
     border-style: solid;
     border-color: #a9a9a9;
     border-width: 0;
@@ -204,17 +204,12 @@
     -webkit-transform: rotate(135deg);
   }
 
-  .arrow {
-    width: 18px;
-    height: 18px;
-  }
-
   .control {
     padding: 0 8px;
   }
 
   .heading-section { 
-    font-size: 20px;
+    font-size: 14px;
   }
 
   .label {

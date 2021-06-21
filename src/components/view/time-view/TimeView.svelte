@@ -31,7 +31,7 @@
     margin: 6px 0 12px 0;
     color: var(--time-selected-text-color);
     font-weight: 600;
-    font-size: 20px;
+    font-size: 14px;
   }
 
   .time-container.is-night .chosen-date {

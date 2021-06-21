@@ -25,8 +25,8 @@
     user-select: none;
     width: 100%;
     padding-top: 0;
-    width: 340px;
-    height: 345px;
+    width: 240px;
+    height: 260px;
   }
   
   /* @media (min-width: 600px) {
