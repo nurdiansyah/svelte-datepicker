@@ -167,6 +167,11 @@
 
   function pickHandler() {
     value = $formatter.formattedCombined || "";
+    if (isRangePicker) {
+      setRangeValue();
+    } else {
+      setDateValue();
+    }
   }
 
   $: {
