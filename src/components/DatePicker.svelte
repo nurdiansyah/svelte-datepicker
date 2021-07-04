@@ -10,7 +10,7 @@
 
   export let range = false;
   export let placeholder = "Choose Date";
-  export let format = "DD / MM / YYYY";
+  export let format = "DD-MMMM-YYYY";
   export let startDate = dayjs().subtract(1, "year");
   export let endDate = dayjs().add(1, "year");
   export let selectableCallback = null;
@@ -140,8 +140,6 @@
   }
 
   function openHandler() {
-    console.log("open handler");
-
     initialisePicker();
     $isOpen = true;
     ["click", "touchstart", "keyup"].forEach((event) => {
@@ -167,7 +165,7 @@
 
   function pickHandler() {
     value = $formatter.formattedCombined || "";
-    if (isRangePicker) {
+    if (config.isRangePicker) {
       setRangeValue();
     } else {
       setDateValue();

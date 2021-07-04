@@ -1,7 +1,7 @@
 <div class="calendar" class:is-range-picker={config.isRangePicker} class:day={$isDaytime} class:night={!$isDaytime}>
   <svelte:component
     {viewContextKey}
-    this={$component === 'date-view' ? DateView : TimeView}
+    this={DateView}
     on:chosen
   />
 </div>

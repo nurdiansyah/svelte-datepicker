@@ -9,7 +9,7 @@
 
   const { config, component, isDateChosen } = getContext(contextKey)
 
-  function finalise () {
+  function pickHandler () {
     isDateChosen.set(true)
     dispatch("pick");
     close()
@@ -17,19 +17,6 @@
 
   function close() {
     dispatch("close")
-  }
-
-  function progress () {
-    isDateChosen.set(false)
-    if ($component === 'date-view') {
-      if (config.isTimePicker) {
-        component.set('time-view')
-      } else {
-        finalise()
-      }
-    } else if ($component === 'time-view') {
-      finalise()
-    }
   }
 </script>
 
@@ -40,7 +27,7 @@
   <button
     type="button"
     class="button confirm"
-    on:click|preventDefault={progress}
+    on:click|preventDefault={pickHandler}
   >
     {applyLabel}
   </button>
