@@ -194,6 +194,7 @@
     {value}
     on:click={toggleHandler}
   />
+  <slot />
   {#if $isOpen}
     <div class="contents-wrapper visible" use:popperContent={popperOptions}>
       <div class="wrapper">
