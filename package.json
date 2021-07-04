@@ -1,7 +1,7 @@
 {
   "name": "@deboxsoft/svelte-datepicker",
   "svelte": "src/components/DatePicker.svelte",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "license": "MIT",
   "scripts": {
     "dev": "snowpack dev",
@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "test": "web-test-runner \"src/**/*.test.js\"",
     "test:unit": "uvu -r esm",
-    "bump": "bumpp"
+    "bump": "bumpp",
+    "release": "bumpp -tap && npm publish --access public"
   },
   "files": [
     "*",
