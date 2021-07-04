@@ -1,12 +1,3 @@
-<div class="toolbar">
-  <button type="button" class="button close" on:click|preventDefault={progress}>
-    {closeLabel}
-  </button>
-  <button type="button" class="button confirm" on:click|preventDefault={progress}>
-    {applyLabel}
-  </button>
-</div>
-
 <script>
   import { getContext, createEventDispatcher } from 'svelte'
   import { contextKey } from './lib/context.js'
@@ -20,7 +11,12 @@
 
   function finalise () {
     isDateChosen.set(true)
-    dispatch('close')
+    dispatch("pick");
+    close()
+  }
+
+  function close() {
+    dispatch("close")
   }
 
   function progress () {
@@ -36,6 +32,19 @@
     }
   }
 </script>
+
+<div class="toolbar">
+  <button type="button" class="button close" on:click|preventDefault={close}>
+    {closeLabel}
+  </button>
+  <button
+    type="button"
+    class="button confirm"
+    on:click|preventDefault={progress}
+  >
+    {applyLabel}
+  </button>
+</div>
 
 <style>
   .toolbar {

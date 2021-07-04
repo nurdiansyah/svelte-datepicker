@@ -15,7 +15,7 @@
   export let endDate = dayjs().add(1, "year");
   export let selectableCallback = null;
   export let styling = new CalendarStyle();
-  export let selected;
+  export let selected = undefined;
   export let closeOnFocusLoss = true;
   export let time = false;
   export let morning = 7;
@@ -27,6 +27,9 @@
   export let direction = "down";
   export let end = false;
   export let right = true;
+  export let value = "";
+
+  let datePickerRef;
 
   const [popperRef, popperContent] = createPopperActions();
   const popperPlacement = (direction, _end) => {
@@ -38,7 +41,7 @@
   };
   const popperOptions = {
     modifiers: [{ name: "offset", options: { offset: [0, 2] } }],
-    placement: popperPlacement(direction, end || right)
+    placement: popperPlacement(direction, end || right),
   };
 
   const dispatch = createEventDispatcher();
@@ -65,7 +68,6 @@
     selectedEndDate,
     isOpen,
     isClosing,
-    isPredefined,
     highlighted,
     formatter,
     isDateChosen,
@@ -77,8 +79,6 @@
   if (config.isRangePicker) {
     setContext(endContextKey, createViewContext(false, getContext(contextKey)));
   }
-
-  let popover;
 
   function initialisePicker() {
     highlighted.set($selectedStartDate);
@@ -106,6 +106,7 @@
     }
     const from = $selectedStartDate;
     const to = $selectedEndDate;
+
     if (to.isBefore(from)) {
       selectedStartDate.set(to);
       selectedEndDate.set(from);
@@ -114,37 +115,66 @@
 
   function addDate(e) {
     const { date } = e.detail;
+
     if ($isSelectingFirstDate) {
       selectedStartDate.set(date);
       swapDatesIfRequired();
       config.isRangePicker && isSelectingFirstDate.update((v) => !v);
     } else {
+      if ($selectedEndDate.isSame(date, "day")) {
+        selectedStartDate.set(date);
+      }
       selectedEndDate.set(date);
       swapDatesIfRequired();
       // popover.close()
     }
   }
 
-  function close() {
+  function closeHandler() {
     swapDatesIfRequired();
     $isOpen = false;
+    ["click", "touchstart", "keyup"].forEach((event) => {
+      document.removeEventListener(event, documentHandler, true);
+    });
+    dispatch("close");
   }
 
   function openHandler() {
+    console.log("open handler");
+
+    initialisePicker();
     $isOpen = true;
+    ["click", "touchstart", "keyup"].forEach((event) => {
+      document.addEventListener(event, documentHandler, true);
+    });
   }
 
-  function onToggle({ detail: _isOpen }) {
-    if (_isOpen) {
-      initialisePicker();
-    } else {
-      dispatch("close");
+  function toggleHandler() {
+    if ($isOpen) closeHandler();
+    else openHandler();
+  }
+
+  function documentHandler(e) {
+    if (e && (e.which === 3 || (e.type === "keyup" && e.which !== 9))) return;
+    if (
+      datePickerRef.contains(e.target) &&
+      (e.type !== "keyup" || e.which === 9)
+    ) {
+      return;
     }
+    closeHandler(e);
+  }
+
+  function pickHandler() {
+    value = $formatter.formattedCombined || "";
   }
 
   $: {
+    if (!value === "" && selected) {
+      value = $formatter.formattedCombined || "";
+    }
+
     if ($isDateChosen) {
-      config.isRangePicker ? setRangeValue() : setDateValue();
       dispatch("change");
     }
   }
@@ -155,38 +185,35 @@
   class:open={$isOpen}
   class:closing={$isClosing}
   style={styling.toWrapperStyle()}
+  bind:this={datePickerRef}
 >
   <input
     use:popperRef
     class={className}
     {placeholder}
-    value={$formatter.formattedCombined}
-    on:click={openHandler}
+    {value}
+    on:click={toggleHandler}
   />
-</div>
-{#if $isOpen}
-  <div class="contents-wrapper">
-    <div class="wrapper">
-      <div class="contents-inner">
-        <div
-          use:popperContent={popperOptions}
-          class="contents"
-          class:is-range-picker={config.isRangePicker}
-        >
-          <div class="view">
-            <View viewContextKey={startContextKey} on:chosen={addDate} />
-            {#if config.isRangePicker}
-              <View viewContextKey={endContextKey} on:chosen={addDate} />
-            {/if}
+  {#if $isOpen}
+    <div class="contents-wrapper visible" use:popperContent={popperOptions}>
+      <div class="wrapper">
+        <div class="contents-inner">
+          <div class="contents" class:is-range-picker={config.isRangePicker}>
+            <div class="view">
+              <View viewContextKey={startContextKey} on:chosen={addDate} />
+              {#if config.isRangePicker}
+                <View viewContextKey={endContextKey} on:chosen={addDate} />
+              {/if}
+            </div>
+            <slot name="toolbar">
+              <Toolbar {applyLabel} {closeLabel} on:close={closeHandler} on:pick={pickHandler} />
+            </slot>
           </div>
-          <slot name="toolbar">
-            <Toolbar {applyLabel} {closeLabel} on:close={close} />
-          </slot>
         </div>
       </div>
     </div>
-  </div>
-{/if}
+  {/if}
+</div>
 
 <style>
   .datepicker {
@@ -242,18 +269,18 @@
     }
   }
 
-  .sc-popover { 
+  .sc-popover {
     position: relative;
   }
 
-  .contents-wrapper { 
+  .contents-wrapper {
     position: fixed;
     transition: none;
     z-index: 2;
     display: none;
   }
 
-  .contents-wrapper.visible { 
+  .contents-wrapper.visible {
     display: block;
   }
 
@@ -265,26 +292,26 @@
     overflow: scroll;
   }
 
-  .contents-wrapper.visible .wrapper { 
-    opacity: 1; 
+  .contents-wrapper.visible .wrapper {
+    opacity: 1;
     transform: scale(1);
     display: block;
   }
-  
-  .contents-wrapper.shrink .wrapper { 
-    animation: shrink 150ms forwards cubic-bezier(.92,.09,.18,1.05);
+
+  .contents-wrapper.shrink .wrapper {
+    animation: shrink 150ms forwards cubic-bezier(0.92, 0.09, 0.18, 1.05);
   }
 
-  .wrapper { 
+  .wrapper {
     background: #fff;
-    box-shadow: 0px 10px 26px rgba(0,0,0,0.4) ;
-    opacity: .8; 
+    box-shadow: 0px 10px 26px rgba(0, 0, 0, 0.4);
+    opacity: 0.8;
     padding-top: 0;
     display: none;
-    animation: grow 200ms forwards cubic-bezier(.92,.09,.18,1.05);
+    animation: grow 200ms forwards cubic-bezier(0.92, 0.09, 0.18, 1.05);
   }
 
-  .contents-inner { 
+  .contents-inner {
     animation: fadeIn 400ms forwards;
   }
 </style>
