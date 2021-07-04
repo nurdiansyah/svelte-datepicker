@@ -48,7 +48,6 @@
 
 <style>
   .week { 
-    margin: 3px 0;
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -81,7 +80,7 @@
   }
   .day { 
     flex: 1 0 auto;
-    height: 27px;
+    height: 34px;
     display: flex; 
     flex-basis: 0;
     justify-content: center;
@@ -100,10 +99,10 @@
     display: flex;
     justify-content: center;
     width: 32px;
-    height: 27px;
+    height: 34px;
     position: relative;
     border: 1px solid var(--button-background-color);
-    border-radius: 50%;
+    border-radius: 0.25rem;
     align-items: center;
     background: var(--day-background-color);
     cursor: pointer;
@@ -125,8 +124,9 @@
   .day.selection-end:not(.outside-month) .day--label {
     background-color: var(--highlight-color);
     border: var(--highlight-color) 1px solid;
+    color: var(--selected-day-text-color);
   }
-  .day.selection-end:not(.outside-month) .day--label:hover,
+  .day.selection-start:not(.outside-month) .day--label:hover,
   .day.selection-start:not(.outside-month) .day--label {
     background-color: var(--highlight-color);
     color: var(--selected-day-text-color);
@@ -136,7 +136,7 @@
   .day.selection-end:before {
     content: "";
     position: absolute;
-    height: 27px;
+    height: 34px;
     width: 100%;
   }
   .day.is-range-picker.part-of-range:before, 
@@ -145,14 +145,14 @@
     background-color: var(--passive-highlight-color);
   }
   .day.is-range-picker.selection-start:not(.selection-end) .day--label {
-    border-radius: 50% 0 0 50%;
+    border-radius: .25rem 0 0 .25rem;
   }
   .day.is-range-picker.selection-end:not(.selection-start) .day--label {
-    border-radius: 0 50% 50% 0;
+    border-radius: 0 .25rem .25rem 0;
   }
   .day.selection-start:before, 
   .day.selection-end:before {
-    width: 50%;
+    width: .25rem;
   }
   .day.selection-start:before {
     right: 0;
@@ -163,11 +163,7 @@
   .day.is-range-picker.part-of-range:hover {
     background-color: var(--passive-highlight-color);
     border-color: var(--passive-highlight-color);
-    color: var(--button-background-color);
-  }
-  .day.is-range-picker.selection-start .day--label:hover {
-    background-color: var(--passive-highlight-color);
-    border: var(--highlight-color) 1px solid;
+    /* color: var(--button-background-color); */
   }
   @media (min-width: 480px) { 
     .day--label.highlighted,
@@ -198,17 +194,17 @@
   }
   .day.part-of-range:not(.outside-month) .day--label:hover {
     background-color: var(--highlight-color);
+    border-radius: 0;
+    color: var(--selected-day-text-color);
   }
-  .day:not(.outside-month).part-of-range .day--label {
-    color: var(--day-text-color-in-range);
-  }
+
   .day.is-range-picker.first-of-month:not(.outside-month).selection-end:not(.selection-start):before,
   .day.is-range-picker.first-of-month:not(.outside-month).part-of-range {
-    background: linear-gradient(to left, var(--passive-highlight-color) 70%, transparent);
+    background-color: var(--passive-highlight-color);
   }
   .day.is-range-picker.last-of-month:not(.outside-month).selection-start:not(.selection-end):before,
   .day.is-range-picker.last-of-month:not(.outside-month).part-of-range {
-    background: linear-gradient(to right, var(--passive-highlight-color) 70%, transparent);
+    background-color: var(--passive-highlight-color);
   }
   .day.is-today .day--label,
   .day.selection-start.selection-end.is-today .day--label {

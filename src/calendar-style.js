@@ -7,8 +7,8 @@ class CalendarStyle {
     this.buttonBorderColor = '#eee'
     this.buttonTextColor = '#333'
     this.buttonWidth = '300px'
-    this.highlightColor = '#f7901e'
-    this.passiveHighlightColor = '#FCD9B1'
+    this.highlightColor = '#2196F3'
+    this.passiveHighlightColor = '#eee'
 
     this.dayBackgroundColor = 'none'
     this.dayBackgroundColorIsNight = 'none'
@@ -29,6 +29,8 @@ class CalendarStyle {
     this.timeInputTextColor = '#3d4548'
     this.timeConfirmButtonColor = '#2196F3'
     this.timeConfirmButtonTextColor = 'white'
+    this.timeCloseButtonColor = '#efefef'
+    this.timeCloseButtonTextColor = 'black'
 
     this.toolbarBorderColor = '#888'
 

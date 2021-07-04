@@ -1,6 +1,9 @@
 <div class="toolbar">
-  <button type="button" class="button" on:click|preventDefault={progress}>
-    {pickLabel}
+  <button type="button" class="button close" on:click|preventDefault={progress}>
+    {closeLabel}
+  </button>
+  <button type="button" class="button confirm" on:click|preventDefault={progress}>
+    {applyLabel}
   </button>
 </div>
 
@@ -8,7 +11,8 @@
   import { getContext, createEventDispatcher } from 'svelte'
   import { contextKey } from './lib/context.js'
 
-  export let pickLabel = ""
+  export let applyLabel = "Apply"
+  export let closeLabel = "close"
   
   const dispatch = createEventDispatcher()
 
@@ -42,16 +46,24 @@
   }
 
   .button {
-    font-size: 16px;
+    font-size: 13px;
     flex: 1 0 auto;
     padding: 12px 6px;
     border: 0;
     font-weight: 500;
-    color: var(--time-confirm-button-text-color);
-    background-color: var(--time-confirm-button-color);
     max-width: 340px;
+    margin-right: 5px;
   }
 
+  .button.confirm {
+    color: var(--time-confirm-button-text-color);
+    background-color: var(--time-confirm-button-color);
+  }
+
+  .button.close {
+    color: var(--time-close-button-text-color);
+    background-color: var(--time-close-button-color);
+  }
   @media (min-width: 600px) {
     .toolbar {
       border-top: 1px solid var(--toolbar-border-color);

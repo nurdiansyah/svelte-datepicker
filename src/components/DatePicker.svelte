@@ -24,7 +24,8 @@
   export let morning = 7;
   export let night = 19;
   export let minuteStep = 5;
-  export let pickLabel = "Pick";
+  export let applyLabel = "Apply";
+  export let closeLabel = "Close";
 
   const dispatch = createEventDispatcher();
 
@@ -136,7 +137,7 @@
     on:closed={() => dispatch("close")}
   >
     <div slot="trigger">
-      <slot formatted={$formatter}>
+      <slot formatter={$formatter}>
         {#if !trigger}
           <button class="calendar-button" type="button">
             {#if $isDateChosen}
@@ -162,7 +163,9 @@
             <View viewContextKey={endContextKey} on:chosen={addDate} />
           {/if}
         </div>
-        <Toolbar {pickLabel} on:close={close} />
+        <slot name="toolbar">
+          <Toolbar {applyLabel} {closeLabel} on:close={close} />
+        </slot>
       {/if}
     </div>
   </Popover>
@@ -172,9 +175,10 @@
   .datepicker {
     display: inline-block;
     text-align: center;
-    font-family: Arial;
-    font-size: 12px;
-    line-height: 1em;
+    font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.517;
     overflow: visible;
     width: var(--datepicker-width);
   }

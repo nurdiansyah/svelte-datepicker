@@ -104,7 +104,7 @@
   .contents-wrapper.visible.is-fullscreen {
     display: flex;
     width: 100vw;
-    height: 100%;
+    /* height: 100%; */
     padding-bottom: 80px;
     overflow: scroll;
   }
