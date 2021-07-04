@@ -1,5 +1,5 @@
 <script>
-  import Popover from "./Popover.svelte";
+  import { createPopperActions } from "svelte-popperjs";
   import { dayjs } from "./lib/date-utils";
   import { contextKey, setup } from "./lib/context";
   import { createEventDispatcher, setContext, getContext } from "svelte";
@@ -7,15 +7,12 @@
   import { createViewContext } from "./lib/view-context.js";
   import Toolbar from "./Toolbar.svelte";
   import View from "./view/View.svelte";
-  import PredefinedView from "./view/predefined-view/PredefinedView.svelte";
 
   export let range = false;
-  export let predefined = false;
   export let placeholder = "Choose Date";
   export let format = "DD / MM / YYYY";
-  export let start = dayjs().subtract(1, "year");
-  export let end = dayjs().add(1, "year");
-  export let trigger = null;
+  export let startDate = dayjs().subtract(1, "year");
+  export let endDate = dayjs().add(1, "year");
   export let selectableCallback = null;
   export let styling = new CalendarStyle();
   export let selected;
@@ -26,6 +23,23 @@
   export let minuteStep = 5;
   export let applyLabel = "Apply";
   export let closeLabel = "Close";
+  export let className = $$props.class || "form-control";
+  export let direction = "down";
+  export let end = false;
+  export let right = true;
+
+  const [popperRef, popperContent] = createPopperActions();
+  const popperPlacement = (direction, _end) => {
+    let prefix = direction;
+    if (direction === "up") prefix = "top";
+    else if (direction === "down") prefix = "bottom";
+    let suffix = end ? "end" : "start";
+    return `${prefix}-${suffix}`;
+  };
+  const popperOptions = {
+    modifiers: [{ name: "offset", options: { offset: [0, 2] } }],
+    placement: popperPlacement(direction, end || right)
+  };
 
   const dispatch = createEventDispatcher();
 
@@ -33,8 +47,8 @@
   const endContextKey = {};
 
   const config = {
-    start: dayjs(start),
-    end: dayjs(end),
+    start: dayjs(startDate),
+    end: dayjs(endDate),
     isRangePicker: range,
     isTimePicker: time,
     closeOnFocusLoss,
@@ -113,7 +127,19 @@
 
   function close() {
     swapDatesIfRequired();
-    popover.close();
+    $isOpen = false;
+  }
+
+  function openHandler() {
+    $isOpen = true;
+  }
+
+  function onToggle({ detail: _isOpen }) {
+    if (_isOpen) {
+      initialisePicker();
+    } else {
+      dispatch("close");
+    }
   }
 
   $: {
@@ -130,52 +156,44 @@
   class:closing={$isClosing}
   style={styling.toWrapperStyle()}
 >
-  <Popover
-    {trigger}
-    bind:this={popover}
-    on:opened={initialisePicker}
-    on:closed={() => dispatch("close")}
-  >
-    <div slot="trigger">
-      <slot formatter={$formatter}>
-        {#if !trigger}
-          <button class="calendar-button" type="button">
-            {#if $isDateChosen}
-              {$formatter.formattedCombined}
-            {:else}
-              {placeholder}
-            {/if}
-          </button>
-        {/if}
-      </slot>
-    </div>
-    <div
-      class="contents"
-      slot="contents"
-      class:is-range-picker={config.isRangePicker}
-    >
-      {#if predefined && !$isPredefined}
-        <PredefinedView />
-      {:else}
-        <div class="view">
-          <View viewContextKey={startContextKey} on:chosen={addDate} />
-          {#if config.isRangePicker}
-            <View viewContextKey={endContextKey} on:chosen={addDate} />
-          {/if}
-        </div>
-        <slot name="toolbar">
-          <Toolbar {applyLabel} {closeLabel} on:close={close} />
-        </slot>
-      {/if}
-    </div>
-  </Popover>
+  <input
+    use:popperRef
+    class={className}
+    {placeholder}
+    value={$formatter.formattedCombined}
+    on:click={openHandler}
+  />
 </div>
+{#if $isOpen}
+  <div class="contents-wrapper">
+    <div class="wrapper">
+      <div class="contents-inner">
+        <div
+          use:popperContent={popperOptions}
+          class="contents"
+          class:is-range-picker={config.isRangePicker}
+        >
+          <div class="view">
+            <View viewContextKey={startContextKey} on:chosen={addDate} />
+            {#if config.isRangePicker}
+              <View viewContextKey={endContextKey} on:chosen={addDate} />
+            {/if}
+          </div>
+          <slot name="toolbar">
+            <Toolbar {applyLabel} {closeLabel} on:close={close} />
+          </slot>
+        </div>
+      </div>
+    </div>
+  </div>
+{/if}
 
 <style>
   .datepicker {
     display: inline-block;
     text-align: center;
-    font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     font-size: 0.8125rem;
     font-weight: 400;
     line-height: 1.517;
@@ -222,5 +240,51 @@
       flex-direction: row;
       justify-content: center;
     }
+  }
+
+  .sc-popover { 
+    position: relative;
+  }
+
+  .contents-wrapper { 
+    position: fixed;
+    transition: none;
+    z-index: 2;
+    display: none;
+  }
+
+  .contents-wrapper.visible { 
+    display: block;
+  }
+
+  .contents-wrapper.visible.is-fullscreen {
+    display: flex;
+    width: 100vw;
+    /* height: 100%; */
+    padding-bottom: 80px;
+    overflow: scroll;
+  }
+
+  .contents-wrapper.visible .wrapper { 
+    opacity: 1; 
+    transform: scale(1);
+    display: block;
+  }
+  
+  .contents-wrapper.shrink .wrapper { 
+    animation: shrink 150ms forwards cubic-bezier(.92,.09,.18,1.05);
+  }
+
+  .wrapper { 
+    background: #fff;
+    box-shadow: 0px 10px 26px rgba(0,0,0,0.4) ;
+    opacity: .8; 
+    padding-top: 0;
+    display: none;
+    animation: grow 200ms forwards cubic-bezier(.92,.09,.18,1.05);
+  }
+
+  .contents-inner { 
+    animation: fadeIn 400ms forwards;
   }
 </style>

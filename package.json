@@ -17,6 +17,10 @@
     "!.github"
   ],
 
+  "dependencies": {
+    "svelte-popperjs": "^1.2.6"
+  },
+
   "devDependencies": {
     "@beyonk/eslint-config": "^4.2.0",
     "@beyonk/snowpack-rollup-plugin": "0.0.1",
