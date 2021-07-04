@@ -1,14 +1,15 @@
 {
   "name": "@deboxsoft/svelte-datepicker",
   "svelte": "src/components/DatePicker.svelte",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "scripts": {
     "dev": "snowpack dev",
     "build": "snowpack build",
     "lint": "eslint .",
     "test": "web-test-runner \"src/**/*.test.js\"",
-    "test:unit": "uvu -r esm"
+    "test:unit": "uvu -r esm",
+    "bump": "bumpp"
   },
   "files": [
     "*",
@@ -16,11 +17,9 @@
     "!deploymnet-config",
     "!.github"
   ],
-
   "dependencies": {
     "svelte-popperjs": "^1.2.6"
   },
-
   "devDependencies": {
     "@beyonk/eslint-config": "^4.2.0",
     "@beyonk/snowpack-rollup-plugin": "0.0.1",
@@ -29,9 +28,10 @@
     "@snowpack/web-test-runner-plugin": "^0.2.1",
     "@testing-library/svelte": "^3.0.0",
     "@web/test-runner": "^0.9.7",
+    "bumpp": "^6.0.6",
     "dayjs": "^1.9.6",
-    "eslint": "^7.14.0",
     "es6-object-assign": "^1.1.0",
+    "eslint": "^7.14.0",
     "eslint-plugin-svelte3": "^2.7.3",
     "esm": "^3.2.25",
     "mockdate": "^3.0.2",
