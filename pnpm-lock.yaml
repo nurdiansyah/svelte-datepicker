@@ -16,7 +16,6 @@ specifiers:
   eslint-plugin-svelte3: ^2.7.3
   esm: ^3.2.25
   mockdate: ^3.0.2
-  process: ^0.11.10
   sinon: ^9.2.4
   snowpack: ^3.0.10
   svelte: ^3.24.0
@@ -44,7 +43,6 @@ devDependencies:
   eslint-plugin-svelte3: 2.7.3_eslint@7.30.0+svelte@3.38.3
   esm: 3.2.25
   mockdate: 3.0.5
-  process: 0.11.10
   sinon: 9.2.4
   snowpack: 3.7.1
   svelte: 3.38.3
@@ -5774,11 +5772,6 @@ packages:
 
   /process-nextick-args/2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
-    dev: true
-
-  /process/0.11.10:
-    resolution: {integrity: sha1-czIwDoQBYb2j5podHZGn1LwW8YI=}
-    engines: {node: '>= 0.6.0'}
     dev: true
 
   /progress/2.0.3:

@@ -206,13 +206,17 @@
   .day.is-range-picker.last-of-month:not(.outside-month).part-of-range {
     background-color: var(--passive-highlight-color);
   }
-  .day.is-today .day--label,
-  .day.selection-start.selection-end.is-today .day--label {
+  .day.is-today .day--label {
     opacity: 1; 
     background: none;
     border: var(--highlight-color)  1px solid;
     color: var(--current-day-text-color);
   }
+
+  .day.is-today .day--label:hover {
+    background-color: var(--passive-highlight-color);
+  }
+
   @keyframes shake {
     0% { transform: translate(7px); }
     20% { transform: translate(-7px); }

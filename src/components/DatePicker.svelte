@@ -7,8 +7,6 @@
   import { createViewContext } from "./lib/view-context.js";
   import Toolbar from "./Toolbar.svelte";
   import View from "./view/View.svelte";
-import { on } from "process";
-import { prevent_default } from "svelte/internal";
 
   export let range = false;
   export let placeholder = "Choose Date";
@@ -191,8 +189,6 @@ import { prevent_default } from "svelte/internal";
       dispatch("change");
     }
   }
-
-  $: console.log(showClearButton, "clear button");
 </script>
 
 <div
