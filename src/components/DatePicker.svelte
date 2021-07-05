@@ -25,7 +25,7 @@
   export let closeLabel = "Close";
   export let className = $$props.class || "form-control";
   export let wrapperInputClass = "form-control-feedback";
-  export let iconInputClass = "form-control-feedback text-grey-600"
+  export let iconInputClass = "form-control-feedback text-grey-600";
   export let direction = "down";
   export let end = false;
   export let right = true;
@@ -193,32 +193,35 @@
 </script>
 
 <div
-  class="datepicker"
+  class="datepicker {wrapperInputClass}"
   class:open={$isOpen}
   class:closing={$isClosing}
   style={styling.toWrapperStyle()}
   bind:this={datePickerRef}
 >
-  <div class={wrapperInputClass} >
-    <input
-      use:popperRef
-      class={className}
-      {placeholder}
-      {value}
-      on:click={toggleHandler}
-    />
-    <slot name="add-on">
-      <div class={iconInputClass} >
-        {#if showClearButton && !$cleared}
-          <a href="/#" target="_self" class="btn-light" on:click|preventDefault={clearHandler}>
-            <i class="icon-cross3" />
-          </a>
-        {:else}
-          <i class="icon-calendar" />
-        {/if}
-      </div>
-    </slot>
-  </div>
+  <input
+    use:popperRef
+    class={className}
+    {placeholder}
+    {value}
+    on:click={toggleHandler}
+  />
+  <slot name="add-on">
+    <div class={iconInputClass}>
+      {#if showClearButton && !$cleared}
+        <a
+          href="/#"
+          target="_self"
+          class="btn-light"
+          on:click|preventDefault={clearHandler}
+        >
+          <i class="icon-cross3" />
+        </a>
+      {:else}
+        <i class="icon-calendar" />
+      {/if}
+    </div>
+  </slot>
   <slot />
   {#if $isOpen}
     <div class="contents-wrapper visible" use:popperContent={popperOptions}>
@@ -232,7 +235,12 @@
               {/if}
             </div>
             <slot name="toolbar">
-              <Toolbar {applyLabel} {closeLabel} on:close={closeHandler} on:pick={pickHandler} />
+              <Toolbar
+                {applyLabel}
+                {closeLabel}
+                on:close={closeHandler}
+                on:pick={pickHandler}
+              />
             </slot>
           </div>
         </div>
