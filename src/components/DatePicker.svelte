@@ -286,17 +286,13 @@
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.1);
   }
 
-  *,
-  *:before,
-  *:after {
-    box-sizing: inherit;
-  }
-
   .contents {
     width: 100%;
     display: flex;
     flex-direction: column;
     background: var(--content-background);
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
   }
 
   .view {
@@ -320,19 +316,7 @@
     position: fixed;
     transition: none;
     z-index: 2;
-    border: 1px solid rgba(0,0,0,.15);
-  }
-
-  .contents-wrapper.visible {
     display: block;
-  }
-
-  .contents-wrapper.visible.is-fullscreen {
-    display: flex;
-    width: 100vw;
-    /* height: 100%; */
-    padding-bottom: 80px;
-    overflow: scroll;
   }
 
   .contents-wrapper.visible .wrapper {
@@ -350,7 +334,7 @@
     box-shadow: 0px 10px 26px rgba(0, 0, 0, 0.4);
     opacity: 0.8;
     padding-top: 0;
-    display: none;
+    display: block;
     animation: grow 200ms forwards cubic-bezier(0.92, 0.09, 0.18, 1.05);
   }
 
