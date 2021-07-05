@@ -20,6 +20,8 @@ function setup (given, config) {
   const rightDate = config.isRangePicker ? ensureFutureMonth(preSelectedStart, preSelectedEnd).startOf('month') : null
 
   return {
+    preSelectedStart,
+    preSelectedEnd,
     cleared,
     months: getMonths(config),
     component,

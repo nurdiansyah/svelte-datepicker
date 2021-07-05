@@ -68,6 +68,8 @@
   setContext(contextKey, setup(selected, config));
   const {
     cleared,
+    preSelectedStart,
+    preSelectedEnd,
     selectedStartDate,
     selectedEndDate,
     isOpen,
@@ -180,7 +182,12 @@
 
   function clearHandler() {
     $cleared = true;
-    value = "";
+    if (allowEmpty) {
+      value = "";
+    } else {
+      $selectedStartDate = preSelectedStart;
+      $selectedEndDate = preSelectedEnd;
+    }
     dispatch("clear");
   }
 

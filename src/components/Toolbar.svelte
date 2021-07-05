@@ -62,17 +62,4 @@
     color: var(--time-close-button-text-color);
     background-color: var(--time-close-button-color);
   }
-  /* @media (min-width: 600px) {
-    .toolbar {
-      border-top: 1px solid var(--toolbar-border-color);
-      padding: 6px;
-      justify-content: flex-end;
-    }
-
-    .button {
-      flex: 0 0 auto;
-      padding: 6px 12px;
-      border-radius: 5px;
-    }
-  } */
 </style>
