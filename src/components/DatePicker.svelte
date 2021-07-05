@@ -24,7 +24,8 @@
   export let applyLabel = "Apply";
   export let closeLabel = "Close";
   export let className = $$props.class || "form-control";
-  export let wrapperInputClass = "form-group";
+  export let wrapperInputClass = "form-control-feedback";
+  export let iconInputClass = "form-control-feedback text-grey-600"
   export let direction = "down";
   export let end = false;
   export let right = true;
@@ -207,13 +208,15 @@
       on:click={toggleHandler}
     />
     <slot name="add-on">
-      {#if showClearButton && !$cleared}
-        <a href="/#" target="_self" class="btn-light" on:click|preventDefault={clearHandler}>
-          <i class="icon-cross3" />
-        </a>
-      {:else}
-      <i class="icon-calendar" />
-      {/if}
+      <div class={iconInputClass} >
+        {#if showClearButton && !$cleared}
+          <a href="/#" target="_self" class="btn-light" on:click|preventDefault={clearHandler}>
+            <i class="icon-cross3" />
+          </a>
+        {:else}
+          <i class="icon-calendar" />
+        {/if}
+      </div>
     </slot>
   </div>
   <slot />
