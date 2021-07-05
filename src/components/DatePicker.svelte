@@ -29,7 +29,6 @@
   export let direction = "down";
   export let end = false;
   export let right = true;
-  export let value = "";
   export let showClearButton = false;
 
   let datePickerRef;
@@ -77,6 +76,7 @@
     isDateChosen,
     isSelectingFirstDate,
   } = getContext(contextKey);
+  let value = selected ? $formatter.formattedCombined || "" : "";
 
   setContext(startContextKey, createViewContext(true, getContext(contextKey)));
 
