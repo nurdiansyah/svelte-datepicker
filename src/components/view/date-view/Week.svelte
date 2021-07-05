@@ -80,7 +80,7 @@
   }
   .day { 
     flex: 1 0 auto;
-    height: 34px;
+    height: 36px;
     display: flex; 
     flex-basis: 0;
     justify-content: center;
@@ -98,8 +98,8 @@
     color: var(--day-text-color);
     display: flex;
     justify-content: center;
-    width: 32px;
-    height: 34px;
+    width: 40px;
+    height: 36px;
     position: relative;
     border: 1px solid var(--button-background-color);
     border-radius: 0.25rem;
@@ -136,7 +136,7 @@
   .day.selection-end:before {
     content: "";
     position: absolute;
-    height: 34px;
+    height: 36px;
     width: 100%;
   }
   .day.is-range-picker.part-of-range:before, 

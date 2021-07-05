@@ -25,7 +25,6 @@
     user-select: none;
     width: 100%;
     padding-top: 0;
-    width: 240px;
     height: 300px;
   }
   

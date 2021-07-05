@@ -86,7 +86,7 @@
   }
 
   function initialisePicker() {
-    highlighted.set($selectedStartDate);
+    // highlighted.set($selectedStartDate);
     dispatch("open");
   }
 
@@ -286,7 +286,6 @@
   }
 
   .contents {
-    min-width: 320px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -314,7 +313,7 @@
     position: fixed;
     transition: none;
     z-index: 2;
-    display: none;
+    border: 1px solid rgba(0,0,0,.15);
   }
 
   .contents-wrapper.visible {
