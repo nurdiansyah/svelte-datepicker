@@ -30,6 +30,7 @@
   export let end = false;
   export let right = true;
   export let showClearButton = false;
+  export let allowEmpty = false;
 
   let datePickerRef;
 
@@ -76,7 +77,7 @@
     isDateChosen,
     isSelectingFirstDate,
   } = getContext(contextKey);
-  let value = selected ? $formatter.formattedCombined || "" : "";
+  let value = selected && !allowEmpty ? $formatter.formattedCombined || "" : "";
 
   setContext(startContextKey, createViewContext(true, getContext(contextKey)));
 
