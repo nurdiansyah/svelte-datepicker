@@ -169,6 +169,7 @@
 
   function pickHandler() {
     value = $formatter.formattedCombined || "";
+    $cleared = false;
     if (config.isRangePicker) {
       setRangeValue();
     } else {
@@ -177,7 +178,7 @@
   }
 
   function clearHandler() {
-    cleared.set(true);
+    $cleared = true;
     value = "";
     dispatch("clear");
   }

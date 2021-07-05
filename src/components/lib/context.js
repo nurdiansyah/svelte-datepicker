@@ -10,7 +10,7 @@ const contextKey = {}
 function setup (given, config) {
   const today = dayjs().startOf('day')
   const { isDateChosen, chosen: [ preSelectedStart, preSelectedEnd ] } = sanitizeInitialValue(given, config)
-  const cleared = writable(!(preSelectedStart || preSelectedEnd))
+  const cleared = writable(!!(preSelectedStart || preSelectedEnd))
   const selectedStartDate = writable(preSelectedStart)
   const selectedEndDate = writable(preSelectedEnd)
   const { formatter } = createFormatter(selectedStartDate, selectedEndDate, config)
