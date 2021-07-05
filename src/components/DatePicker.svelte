@@ -77,7 +77,7 @@
     isDateChosen,
     isSelectingFirstDate,
   } = getContext(contextKey);
-  let value = selected && !allowEmpty ? $formatter.formattedCombined || "" : "";
+  let value = selected || !allowEmpty ? $formatter.formattedCombined || "" : "";
 
   setContext(startContextKey, createViewContext(true, getContext(contextKey)));
 
