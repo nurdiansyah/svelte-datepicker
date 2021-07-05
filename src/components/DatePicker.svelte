@@ -178,6 +178,7 @@
 
   function clearHandler() {
     cleared.set(true);
+    value = "";
     dispatch("clear");
   }
 
