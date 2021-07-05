@@ -24,6 +24,7 @@
   "devDependencies": {
     "@beyonk/eslint-config": "^4.2.0",
     "@beyonk/snowpack-rollup-plugin": "0.0.1",
+    "@popperjs/core": "^2.9.2",
     "@snowpack/plugin-dotenv": "^2.0.5",
     "@snowpack/plugin-svelte": "^3.5.1",
     "@snowpack/web-test-runner-plugin": "^0.2.1",
@@ -36,9 +37,11 @@
     "eslint-plugin-svelte3": "^2.7.3",
     "esm": "^3.2.25",
     "mockdate": "^3.0.2",
+    "process": "^0.11.10",
     "sinon": "^9.2.4",
     "snowpack": "^3.0.10",
     "svelte": "^3.24.0",
+    "svelte-hmr": "^0.14.4",
     "tinro": "^0.3.7",
     "uvu": "^0.5.1"
   },

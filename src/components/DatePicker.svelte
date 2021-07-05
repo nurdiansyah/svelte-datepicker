@@ -7,6 +7,8 @@
   import { createViewContext } from "./lib/view-context.js";
   import Toolbar from "./Toolbar.svelte";
   import View from "./view/View.svelte";
+import { on } from "process";
+import { prevent_default } from "svelte/internal";
 
   export let range = false;
   export let placeholder = "Choose Date";
@@ -24,10 +26,12 @@
   export let applyLabel = "Apply";
   export let closeLabel = "Close";
   export let className = $$props.class || "form-control";
+  export let wrapperInputClass = "form-group";
   export let direction = "down";
   export let end = false;
   export let right = true;
   export let value = "";
+  export let showClearButton = false;
 
   let datePickerRef;
 
@@ -64,6 +68,7 @@
 
   setContext(contextKey, setup(selected, config));
   const {
+    cleared,
     selectedStartDate,
     selectedEndDate,
     isOpen,
@@ -172,6 +177,11 @@
     }
   }
 
+  function clearHandler() {
+    cleared.set(true);
+    dispatch("clear");
+  }
+
   $: {
     if (!value === "" && selected) {
       value = $formatter.formattedCombined || "";
@@ -181,6 +191,8 @@
       dispatch("change");
     }
   }
+
+  $: console.log(showClearButton, "clear button");
 </script>
 
 <div
@@ -190,13 +202,24 @@
   style={styling.toWrapperStyle()}
   bind:this={datePickerRef}
 >
-  <input
-    use:popperRef
-    class={className}
-    {placeholder}
-    {value}
-    on:click={toggleHandler}
-  />
+  <div class={wrapperInputClass} >
+    <input
+      use:popperRef
+      class={className}
+      {placeholder}
+      {value}
+      on:click={toggleHandler}
+    />
+    <slot name="add-on">
+      {#if showClearButton && !$cleared}
+        <a href="/#" target="_self" class="btn-light" on:click|preventDefault={clearHandler}>
+          <i class="icon-cross3" />
+        </a>
+      {:else}
+      <i class="icon-calendar" />
+      {/if}
+    </slot>
+  </div>
   <slot />
   {#if $isOpen}
     <div class="contents-wrapper visible" use:popperContent={popperOptions}>
