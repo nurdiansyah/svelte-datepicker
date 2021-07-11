@@ -74,7 +74,6 @@
     selectedEndDate,
     isOpen,
     isClosing,
-    highlighted,
     formatter,
     isDateChosen,
     isSelectingFirstDate,
