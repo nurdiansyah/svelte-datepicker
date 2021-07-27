@@ -25,7 +25,7 @@
     user-select: none;
     width: 100%;
     padding-top: 0;
-    height: 300px;
+    min-height: 300px;
   }
   
   /* @media (min-width: 600px) {
