@@ -94,7 +94,7 @@
                 <Route path="/*">
                   <Route path="/">
                     <div class="demo">
-                      <DatePicker format='ddd, DD MMM YYYY' />
+                      <DatePicker format='ddd, DD MMM YYYY' yearEditable  />
                     </div>
                   </Route>
                 </Route>

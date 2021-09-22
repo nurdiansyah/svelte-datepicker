@@ -10,6 +10,7 @@
 
   let monthSelectorOpen = false
   let availableMonths
+  const yearEditable = config.yearEditable
 
   $: {
     const isOnLowerBoundary = config.start.isSame($displayedDate, 'year')
@@ -48,6 +49,14 @@
     highlighted.set($displayedDate)
   }
 
+  function changeYearHandler (e) {
+    const year = e.target.value
+    displayedDate.update(d => {
+      return d.year(year)
+    })
+    highlighted.set($displayedDate)
+  }
+
   function toggleMonthSelectorOpen () {
     monthSelectorOpen = !monthSelectorOpen
   }
@@ -70,8 +79,16 @@
       <i class="arrow left"></i>
     </button>
     <button type="button" class="label" on:click={toggleMonthSelectorOpen}>
+      {#if yearEditable}
+          {$displayedDate.format('MMMM')}
+        {:else}
       <span>{$displayedDate.format('MMMM YYYY')}</span>
-    </button> 
+        {/if}
+    </button>
+    {#if yearEditable}
+      <input type="number" value={$displayedDate.format('YYYY')} on:input={changeYearHandler} step="1" minlength="4" maxlength="4" min="1000" max="9999">
+      {$displayedDate.format('YYYY')}
+    {/if}
     <button class="control"
       type="button"
       aria-label="Next month"

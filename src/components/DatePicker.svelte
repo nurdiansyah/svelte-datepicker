@@ -1,71 +1,73 @@
 <script>
-  import { createPopperActions } from "svelte-popperjs";
-  import { dayjs } from "./lib/date-utils";
-  import { contextKey, setup } from "./lib/context";
-  import { createEventDispatcher, setContext, getContext } from "svelte";
-  import { CalendarStyle } from "../calendar-style.js";
-  import { createViewContext } from "./lib/view-context.js";
-  import Toolbar from "./Toolbar.svelte";
-  import View from "./view/View.svelte";
+  import { createPopperActions } from 'svelte-popperjs'
+  import { dayjs } from './lib/date-utils'
+  import { contextKey, setup } from './lib/context'
+  import { createEventDispatcher, setContext, getContext } from 'svelte'
+  import { CalendarStyle } from '../calendar-style.js'
+  import { createViewContext } from './lib/view-context.js'
+  import Toolbar from './Toolbar.svelte'
+  import View from './view/View.svelte'
 
-  export let range = false;
-  export let placeholder = "Choose Date";
-  export let format = "DD-MMMM-YYYY";
-  export let startDate = dayjs().subtract(1, "year");
-  export let endDate = dayjs().add(1, "year");
-  export let selectableCallback = null;
-  export let styling = new CalendarStyle();
-  export let selected = undefined;
-  export let closeOnFocusLoss = true;
-  export let time = false;
-  export let morning = 7;
-  export let night = 19;
-  export let minuteStep = 5;
-  export let applyLabel = "Apply";
-  export let closeLabel = "Close";
-  export let className = $$props.class || "form-control";
-  export let wrapperInputClass = "form-control-feedback";
-  export let iconInputClass = "form-control-feedback text-grey-600";
-  export let direction = "down";
-  export let end = false;
-  export let right = true;
-  export let showClearButton = false;
-  export let allowEmpty = false;
+  export let range = false
+  export let placeholder = 'Choose Date'
+  export let format = 'DD-MMMM-YYYY'
+  export let startDate = dayjs().subtract(1, 'year')
+  export let endDate = dayjs().add(1, 'year')
+  export let selectableCallback = null
+  export let styling = new CalendarStyle()
+  export let selected
+  export let closeOnFocusLoss = true
+  export let time = false
+  export let morning = 7
+  export let night = 19
+  export let minuteStep = 5
+  export let applyLabel = 'Apply'
+  export let closeLabel = 'Close'
+  export let className = $$props.class || 'form-control'
+  export let wrapperInputClass = 'form-control-feedback'
+  export let iconInputClass = 'form-control-feedback text-grey-600'
+  export let direction = 'down'
+  export let end = false
+  export let right = true
+  export let showClearButton = false
+  export let allowEmpty = false
+  export let yearEditable = false
 
-  let datePickerRef;
+  let datePickerRef
 
-  const [popperRef, popperContent] = createPopperActions();
+  const [ popperRef, popperContent ] = createPopperActions()
   const popperPlacement = (direction, _end) => {
-    let prefix = direction;
-    if (direction === "up") prefix = "top";
-    else if (direction === "down") prefix = "bottom";
-    let suffix = end ? "end" : "start";
-    return `${prefix}-${suffix}`;
-  };
+    let prefix = direction
+    if (direction === 'up') prefix = 'top'
+    else if (direction === 'down') prefix = 'bottom'
+    const suffix = end ? 'end' : 'start'
+    return `${prefix}-${suffix}`
+  }
   const popperOptions = {
-    modifiers: [{ name: "offset", options: { offset: [0, 2] } }],
-    placement: popperPlacement(direction, end || right),
-  };
+    modifiers: [ { name: 'offset', options: { offset: [ 0, 2 ] } } ],
+    placement: popperPlacement(direction, end || right)
+  }
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
-  const startContextKey = {};
-  const endContextKey = {};
+  const startContextKey = {}
+  const endContextKey = {}
 
   const config = {
     start: dayjs(startDate),
     end: dayjs(endDate),
     isRangePicker: range,
     isTimePicker: time,
+    yearEditable,
     closeOnFocusLoss,
     format,
     morning,
     night,
     selectableCallback,
-    minuteStep: parseInt(minuteStep),
-  };
+    minuteStep: parseInt(minuteStep)
+  }
 
-  setContext(contextKey, setup(selected, config));
+  setContext(contextKey, setup(selected, config))
   const {
     cleared,
     preSelectedStart,
@@ -76,127 +78,127 @@
     isClosing,
     formatter,
     isDateChosen,
-    isSelectingFirstDate,
-  } = getContext(contextKey);
-  let value = selected || !allowEmpty ? $formatter.formattedCombined || "" : "";
+    isSelectingFirstDate
+  } = getContext(contextKey)
+  let value = selected || !allowEmpty ? $formatter.formattedCombined || '' : ''
 
-  setContext(startContextKey, createViewContext(true, getContext(contextKey)));
+  setContext(startContextKey, createViewContext(true, getContext(contextKey)))
 
   if (config.isRangePicker) {
-    setContext(endContextKey, createViewContext(false, getContext(contextKey)));
+    setContext(endContextKey, createViewContext(false, getContext(contextKey)))
   }
 
-  function initialisePicker() {
+  function initialisePicker () {
     // highlighted.set($selectedStartDate);
-    dispatch("open");
+    dispatch('open')
   }
 
-  function setRangeValue() {
-    selected = [$selectedStartDate, $selectedEndDate];
-    dispatch("range-selected", {
+  function setRangeValue () {
+    selected = [ $selectedStartDate, $selectedEndDate ]
+    dispatch('range-selected', {
       from: $selectedStartDate.toDate(),
-      to: $selectedEndDate.toDate(),
-    });
+      to: $selectedEndDate.toDate()
+    })
   }
 
-  function setDateValue() {
-    selected = $selectedStartDate.toDate();
-    dispatch("date-selected", {
-      date: $selectedStartDate.toDate(),
-    });
+  function setDateValue () {
+    selected = $selectedStartDate.toDate()
+    dispatch('date-selected', {
+      date: $selectedStartDate.toDate()
+    })
   }
 
-  function swapDatesIfRequired() {
+  function swapDatesIfRequired () {
     if (!config.isRangePicker) {
-      return;
+      return
     }
-    const from = $selectedStartDate;
-    const to = $selectedEndDate;
+    const from = $selectedStartDate
+    const to = $selectedEndDate
 
     if (to.isBefore(from)) {
-      selectedStartDate.set(to);
-      selectedEndDate.set(from);
+      selectedStartDate.set(to)
+      selectedEndDate.set(from)
     }
   }
 
-  function addDate(e) {
-    const { date } = e.detail;
+  function addDate (e) {
+    const { date } = e.detail
 
     if ($isSelectingFirstDate) {
-      selectedStartDate.set(date);
-      swapDatesIfRequired();
-      config.isRangePicker && isSelectingFirstDate.update((v) => !v);
+      selectedStartDate.set(date)
+      swapDatesIfRequired()
+      config.isRangePicker && isSelectingFirstDate.update((v) => !v)
     } else {
-      if ($selectedEndDate.isSame(date, "day")) {
-        selectedStartDate.set(date);
+      if ($selectedEndDate.isSame(date, 'day')) {
+        selectedStartDate.set(date)
       }
-      selectedEndDate.set(date);
-      swapDatesIfRequired();
+      selectedEndDate.set(date)
+      swapDatesIfRequired()
       // popover.close()
     }
   }
 
-  function closeHandler() {
-    swapDatesIfRequired();
+  function closeHandler () {
+    swapDatesIfRequired()
     $isOpen = false;
-    ["click", "touchstart", "keyup"].forEach((event) => {
-      document.removeEventListener(event, documentHandler, true);
-    });
-    dispatch("close");
+    [ 'click', 'touchstart', 'keyup' ].forEach((event) => {
+      document.removeEventListener(event, documentHandler, true)
+    })
+    dispatch('close')
   }
 
-  function openHandler() {
-    initialisePicker();
+  function openHandler () {
+    initialisePicker()
     $isOpen = true;
-    ["click", "touchstart", "keyup"].forEach((event) => {
-      document.addEventListener(event, documentHandler, true);
-    });
+    [ 'click', 'touchstart', 'keyup' ].forEach((event) => {
+      document.addEventListener(event, documentHandler, true)
+    })
   }
 
-  function toggleHandler() {
-    if ($isOpen) closeHandler();
-    else openHandler();
+  function toggleHandler () {
+    if ($isOpen) closeHandler()
+    else openHandler()
   }
 
-  function documentHandler(e) {
-    if (e && (e.which === 3 || (e.type === "keyup" && e.which !== 9))) return;
+  function documentHandler (e) {
+    if (e && (e.which === 3 || (e.type === 'keyup' && e.which !== 9))) return
     if (
       datePickerRef.contains(e.target) &&
-      (e.type !== "keyup" || e.which === 9)
+      (e.type !== 'keyup' || e.which === 9)
     ) {
-      return;
+      return
     }
-    closeHandler(e);
+    closeHandler(e)
   }
 
-  function pickHandler() {
-    value = $formatter.formattedCombined || "";
-    $cleared = false;
+  function pickHandler () {
+    value = $formatter.formattedCombined || ''
+    $cleared = false
     if (config.isRangePicker) {
-      setRangeValue();
+      setRangeValue()
     } else {
-      setDateValue();
+      setDateValue()
     }
   }
 
-  function clearHandler() {
-    $cleared = true;
+  function clearHandler () {
+    $cleared = true
     if (allowEmpty) {
-      value = "";
+      value = ''
     } else {
-      $selectedStartDate = preSelectedStart;
-      $selectedEndDate = preSelectedEnd;
+      $selectedStartDate = preSelectedStart
+      $selectedEndDate = preSelectedEnd
     }
-    dispatch("clear");
+    dispatch('clear')
   }
 
   $: {
-    if (!value === "" && selected) {
-      value = $formatter.formattedCombined || "";
+    if (!value === '' && selected) {
+      value = $formatter.formattedCombined || ''
     }
 
     if ($isDateChosen) {
-      dispatch("change");
+      dispatch('change')
     }
   }
 </script>
