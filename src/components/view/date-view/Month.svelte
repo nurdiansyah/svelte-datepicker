@@ -2,14 +2,22 @@
   import Week from './Week.svelte'
   import { getContext } from 'svelte'
   import { dayjs } from '../../lib/date-utils.js'
+  import { getCalendarPage } from '../../lib/calendar-page'
 
   export let viewContextKey
   export let id
 
-  const { monthView } = getContext(viewContextKey)
+  const { monthView, displayedDate } = getContext(viewContextKey)
 
   let lastId = id
   let direction
+  let monthNotList
+  $: {
+    if (!$monthView.visibleMonth) {
+      monthNotList = getCalendarPage($displayedDate, () => ({ selectable: false }))
+    }
+  }
+
 
   $: {
     direction = lastId < id ? 1 : -1
@@ -26,6 +34,7 @@
         {/each}
       </div>
     </div>
+    {#if $monthView.visibleMonth}
     {#each $monthView.visibleMonth.weeks as week (week.id)}
       <Week
         {viewContextKey}
@@ -34,6 +43,16 @@
         on:chosen
       />
     {/each}
+      {:else}
+      {#each monthNotList.weeks as week (week.id)}
+        <Week
+                {viewContextKey}
+                days={week.days}
+                {direction}
+                on:chosen
+        />
+      {/each}
+      {/if}
   </div>
 </div>
 

@@ -6,7 +6,7 @@ import { derived } from 'svelte/store'
 
 function createMonthView (months, displayedDate) {
   return derived([ displayedDate ], ([ $displayedDate ]) => {
-    let monthIndex = 0
+    let monthIndex = -1
 
     const month = $displayedDate.month()
     const year = $displayedDate.year()
