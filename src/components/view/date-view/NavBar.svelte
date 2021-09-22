@@ -87,7 +87,6 @@
     </button>
     {#if yearEditable}
       <input type="number" value={$displayedDate.format('YYYY')} on:input={changeYearHandler} step="1" minlength="4" maxlength="4" min="1000" max="9999">
-      {$displayedDate.format('YYYY')}
     {/if}
     <button class="control"
       type="button"
