@@ -28,3 +28,5 @@ export function dayjs (
   }
   return dayjsBase.tz(d, timezone)
 }
+dayjs.min = dayjsBase.min
+dayjs.max = dayjsBase.max
