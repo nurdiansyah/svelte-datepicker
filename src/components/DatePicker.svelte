@@ -123,16 +123,16 @@
 
   function addDate (e) {
     const { date } = e.detail
-
+    const _date = date.hour(7)
     if ($isSelectingFirstDate) {
-      selectedStartDate.set(date)
+      selectedStartDate.set(_date)
       swapDatesIfRequired()
       config.isRangePicker && isSelectingFirstDate.update((v) => !v)
     } else {
       if ($selectedEndDate.isSame(date, 'day')) {
-        selectedStartDate.set(date)
+        selectedStartDate.set(_date)
       }
-      selectedEndDate.set(date)
+      selectedEndDate.set(_date)
       swapDatesIfRequired()
       // popover.close()
     }

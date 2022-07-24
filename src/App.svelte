@@ -189,7 +189,7 @@
                 <h2>Without Time Choice</h2>
                 <Route path="/">
                   <div class="demo">
-                    <DatePicker showClearButton format='ddd, DD MMM YYYY' range />
+                    <DatePicker showClearButton format='ddd, DD MMM YYYY' range yearEditable />
                   </div>
                 </Route>
                 <Route path="/with-responsive-positioning/*">

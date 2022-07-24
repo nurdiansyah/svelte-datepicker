@@ -1,13 +1,13 @@
 {
   "name": "@deboxsoft/svelte-datepicker",
   "svelte": "src/components/DatePicker.svelte",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "license": "MIT",
   "scripts": {
     "dev": "snowpack dev",
     "build": "snowpack build",
     "lint": "eslint .",
-    "test": "web-test-runner \"src/**/*.test.js\"",
+    "test": "web-test-runner \"src/**/*.spec.js\"",
     "test:unit": "uvu -r esm",
     "release": "npm run build && bump -tap && npm publish --access public"
   },
