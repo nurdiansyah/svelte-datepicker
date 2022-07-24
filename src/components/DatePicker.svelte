@@ -96,15 +96,15 @@
   function setRangeValue () {
     selected = [ $selectedStartDate, $selectedEndDate ]
     dispatch('range-selected', {
-      from: $selectedStartDate.toDate(),
-      to: $selectedEndDate.toDate()
+      from: $selectedStartDate,
+      to: $selectedEndDate
     })
   }
 
   function setDateValue () {
     selected = $selectedStartDate.toDate()
     dispatch('date-selected', {
-      date: $selectedStartDate.toDate()
+      date: $selectedStartDate
     })
   }
 
@@ -123,16 +123,16 @@
 
   function addDate (e) {
     const { date } = e.detail
-    const _date = date.hour(7)
+
     if ($isSelectingFirstDate) {
-      selectedStartDate.set(_date)
+      selectedStartDate.set(date)
       swapDatesIfRequired()
       config.isRangePicker && isSelectingFirstDate.update((v) => !v)
     } else {
       if ($selectedEndDate.isSame(date, 'day')) {
-        selectedStartDate.set(_date)
+        selectedStartDate.set(date)
       }
-      selectedEndDate.set(_date)
+      selectedEndDate.set(date)
       swapDatesIfRequired()
       // popover.close()
     }
