@@ -21,10 +21,10 @@ function sanitizeInitialValue (value, config) {
   if (config.isRangePicker) {
     const [ from, to ] = value || []
     isDateChosen = Boolean(from).valueOf() && Boolean(to).valueOf()
-    chosen = isDateChosen ? value.map(dayjs) : [ dayjs.max(dayjs().startOf('month'), config.start), dayjs.min(dayjs(), config.end) ]
+    chosen = isDateChosen ? value.map(dayjs) : [ dayjs().max(dayjs().startOf('month'), config.start), dayjs().min(dayjs(), config.end) ]
   } else {
     isDateChosen = Boolean(value).valueOf()
-    chosen = [ isDateChosen ? dayjs(value) : dayjs.max(dayjs(), config.start) ]
+    chosen = [ isDateChosen ? dayjs(value) : dayjs().max(dayjs(), config.start) ]
   }
 
   const [ from, to ] = chosen
