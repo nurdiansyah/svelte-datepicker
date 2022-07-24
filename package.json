@@ -1,7 +1,7 @@
 {
   "name": "@deboxsoft/svelte-datepicker",
   "svelte": "src/components/DatePicker.svelte",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "license": "MIT",
   "scripts": {
     "dev": "snowpack dev",
