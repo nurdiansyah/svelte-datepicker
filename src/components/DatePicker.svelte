@@ -181,7 +181,7 @@
     }
   }
 
-  function clearHandler () {
+  export function clearHandler () {
     $cleared = true
     if (allowEmpty) {
       value = ''
